@@ -24,3 +24,7 @@ html,body{
 .text-enter{ 
     flex: 1;
 }
+
+.warning{
+    color: red;
+}
