@@ -59,7 +59,6 @@ class JSONTree{
     #makeTreeNode = (type, key, value, children) => { return { type: type, key: key, value: value, children: children } };
 
     constructor(jsonObject){
-        this.linearTraversal = [];
         this.root = this.buildNodes(jsonObject, null, 0);
     }
 
@@ -72,15 +71,12 @@ class JSONTree{
         throw "UNEXPECTED TYPE ERROR";
     }
 
-    //Buildsd the tree recursivly
+    //Builds the tree recursivly
     buildNodes(jsonValue, jsonName, depth){
         const t = this.getType(jsonValue);
         const k = jsonName;
         let v = null;
         let c = [];
-
-        this.linearTraversal.push({ type: t, name: jsonName, value: null, numChildren: 0, depth: depth });
-        let linearIndex = this.linearTraversal.length - 1;
 
         if (t === "object"){
             Object.keys(jsonValue).forEach(key => {
@@ -98,59 +94,10 @@ class JSONTree{
             v = jsonValue;
         }
 
-        this.linearTraversal[linearIndex].value = v;
-        this.linearTraversal[linearIndex].numChildren = c.length;
-
         return this.#makeTreeNode(t, k, v, c);
     }
 
     //TODO: Add non-recursive tree building function here
-
-    forEach(func){
-        this.linearTraversal.forEach(node => {
-            func(node);
-        });
-    }
-}
-
-function buildJSONHTML(jsonTree){
-
-    const span = (content) => `<span>${content}</span>` 
-    const block = (name) => `<img src="img/${name}.gif" class="json-grid-item"/>`;
-    const button_block = (name) => `<img src="img/${name}.gif" class="json-grid-item button-block"/>`;
-
-    let html = "";
-
-    jsonTree.forEach(node => {
-        let span = `<span class="tree-span">`;
-        for (let i = 0; i < node.depth; i++){
-            span += block("s");
-        }
-
-        switch (node.type){
-            case "object":
-                span += button_block("elbow-minus") + block("object");
-                break;
-            case "array":
-                span += button_block("elbow-minus") + block("array");
-                break;
-            case "string":
-                span += block("s") + block("green");
-                break;
-            case "number":
-                span += block("s") + block("blue");
-                break;
-        }
-
-        if (node.name)
-            span += node.name;
-        if (node.value)
-            span += `: ${node.value}`;
-
-        html += span + "</span><br/>";
-    });
-
-    return html;
 }
 
 let _jsonHtmlBlockId = 0;
@@ -158,7 +105,7 @@ function buildJSONHtmlRecursive(root, depth){
     const block = (name) => `<img src="img/${name}.gif" class="json-grid-item"/>`;
     const button_block = (name) => `<img src="img/${name}.gif" class="json-grid-item button-block"/>`;
 
-    let html = `<div id="${_jsonHtmlBlockId}"><span class="tree-span">`;
+    let html = `<div id="json-block-id-${_jsonHtmlBlockId}"><span class="tree-span">`;
 
     for (let i = 0; i < depth; i++){
         html += block("s");
@@ -187,6 +134,7 @@ function buildJSONHtmlRecursive(root, depth){
     html += "</span><br/>"
 
     root.children.forEach(item => {
+        _jsonHtmlBlockId += 1;
         html += buildJSONHtmlRecursive(item, depth + 1);
     });
 
@@ -195,13 +143,23 @@ function buildJSONHtmlRecursive(root, depth){
 
 function renderJSON(){
     let json = JSON.parse($("#json-text-area").val());
-
     let jt = new JSONTree(json);
-    //console.log(jt.root);
 
-    //let htmlJSON = buildJSONHTML(jt);
+    _jsonHtmlBlockId = 0;
     let htmlJSON = buildJSONHtmlRecursive(jt.root, 0);
+
     $("#viewer").html(htmlJSON);
+
+    $(".button-block").click(function(){
+        let divParentId = $(this).parent().parent().attr("id");
+        
+        //Toggle show/hide children elements
+        $(`#${divParentId} > div`).toggle();
+    
+        //Toggle +/- of the button
+        const curr = $(this).attr("src");
+        $(this).attr("src", curr === "img/elbow-minus.gif" ? "img/elbow-plus.gif" : "img/elbow-minus.gif");
+    });
 }
 
 //Allow tab indentation to work with text areas
@@ -229,8 +187,4 @@ $("#json-render-button").click(() => {
     } else {
         $("#invalid-format-msg").show();
     }
-});
-
-$(".button-block").click(function(){
-
 });
