@@ -100,17 +100,23 @@ class JSONTree{
     //TODO: Add non-recursive tree building function here
 }
 
-let _jsonHtmlBlockId = 0;
+
+//Builds the html for the json tree recursivly
+let _jsonHtmlBlockId = 0; //Id for blocks
 function buildJSONHtmlRecursive(root, depth){
+    //Shorthand methods
     const block = (name) => `<img src="img/${name}.gif" class="json-grid-item"/>`;
     const button_block = (name) => `<img src="img/${name}.gif" class="json-grid-item button-block"/>`;
 
+    //Div start
     let html = `<div id="json-block-id-${_jsonHtmlBlockId}"><span class="tree-span">`;
 
+    //Add spacing
     for (let i = 0; i < depth; i++){
         html += block("s");
     }
 
+    //Add blocks depending on the type
     switch (root.type){
         case "object":
             html += button_block("elbow-minus") + block("object");
@@ -126,35 +132,42 @@ function buildJSONHtmlRecursive(root, depth){
             break;
     }
 
+    //Add key and/or value if they exist
     if (root.key)
         html += root.key;
     if (root.value)
         html += `: ${root.value}`;
 
-    html += "</span><br/>"
+    //End the span
+    html += "</span>"
 
+    //Recurse over each child
     root.children.forEach(item => {
         _jsonHtmlBlockId += 1;
         html += buildJSONHtmlRecursive(item, depth + 1);
     });
 
+    //End div
     return html + "</div>";
 }
 
+//Creats an easy to read, interactive HTML version of the json
 function renderJSON(){
+    //Parse the json and create a tree from the result
     let json = JSON.parse($("#json-text-area").val());
     let jt = new JSONTree(json);
 
-    _jsonHtmlBlockId = 0;
+    _jsonHtmlBlockId = 0; //Reset the block id
     let htmlJSON = buildJSONHtmlRecursive(jt.root, 0);
 
     $("#viewer").html(htmlJSON);
 
+    //Whenever one of the +/- buttons is pressed.
     $(".button-block").click(function(){
         let divParentId = $(this).parent().parent().attr("id");
         
         //Toggle show/hide children elements
-        $(`#${divParentId} > div`).toggle();
+        $(`#${divParentId} > div`).toggle(100);
     
         //Toggle +/- of the button
         const curr = $(this).attr("src");
