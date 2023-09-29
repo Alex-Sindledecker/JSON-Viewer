@@ -67,6 +67,7 @@ class JSONTree{
         if (jsonValue.constructor === Object) return "object";
         if (typeof jsonValue === "string") return "string";
         if (typeof jsonValue === "number") return "number";
+        if (typeof jsonValue === "boolean") return "boolean";
 
         throw "UNEXPECTED TYPE ERROR";
     }
@@ -91,7 +92,7 @@ class JSONTree{
                 c.push(node);
             }
         } else {
-            v = jsonValue;
+            v = jsonValue.toString();
         }
 
         return this.#makeTreeNode(t, k, v, c);
@@ -137,6 +138,8 @@ function buildJSONHtmlRecursive(root, depth){
         case "number":
             html += block("s") + block("blue");
             break;
+        case "boolean":
+            html += block("s") + block("blue");
     }
 
     //Add key and/or value if they exist
