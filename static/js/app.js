@@ -97,6 +97,13 @@ class JSONTree{
         return this.#makeTreeNode(t, k, v, c);
     }
 
+    buildNodes2(root, rootName){
+        let ty = this.getType(root);
+        let key = rootName;
+        let value = null;
+        let children = [];
+    }
+
     //TODO: Add non-recursive tree building function here
 }
 
@@ -105,8 +112,8 @@ class JSONTree{
 let _jsonHtmlBlockId = 0; //Id for blocks
 function buildJSONHtmlRecursive(root, depth){
     //Shorthand methods
-    const block = (name) => `<img src="img/${name}.gif" class="json-grid-item"/>`;
-    const button_block = (name) => `<img src="img/${name}.gif" class="json-grid-item button-block"/>`;
+    const block = (name) => `<img src="/img/${name}.gif" class="json-grid-item"/>`;
+    const button_block = (name) => `<img src="/img/${name}.gif" class="json-grid-item button-block"/>`;
 
     //Div start
     let html = `<div id="json-block-id-${_jsonHtmlBlockId}"><span class="tree-span">`;
@@ -171,7 +178,7 @@ function renderJSON(){
     
         //Toggle +/- of the button
         const curr = $(this).attr("src");
-        $(this).attr("src", curr === "img/elbow-minus.gif" ? "img/elbow-plus.gif" : "img/elbow-minus.gif");
+        $(this).attr("src", curr === "/img/elbow-minus.gif" ? "/img/elbow-plus.gif" : "/img/elbow-minus.gif");
     });
 }
 

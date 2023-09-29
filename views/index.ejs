@@ -2,7 +2,7 @@
 <html>
     <head>
         <meta charset="utf-8"/>
-        <link rel="stylesheet" href="css/main.css" />
+        <link rel="stylesheet" href="/css/main.css" type="text/css" />
         <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
         <title>JSON Parser</title>
     </head>
@@ -14,7 +14,11 @@
             </div>
             <div class="text-enter">
                 <h2>Enter raw JSON below:</h2>
-                <textarea id="json-text-area"></textarea><br/>
+                <textarea id="json-text-area">
+                    <% if (locals.json) { %>
+<%= locals.json %>
+                    <% } %>
+                </textarea><br/>
                 <button id="json-render-button" class="button-block">Render</button>
                 <p class="warning" style="display: none;" id="invalid-format-msg">The text entered is not in a valid JSON format!</p>
             </div>
@@ -22,6 +26,6 @@
 
         <%- include("footer.ejs") %>
 
-        <script src="js/app.js"></script>
+        <script src="/js/app.js"></script>
     </body>
 </html>
