@@ -15,8 +15,28 @@ footer{
     display: flex;
     justify-content: space-evenly;
     font-family: sans-serif;
-    margin: 1rem;
-    padding: 1rem;
+    padding: 1em;
+
+    background-color: coral;
+}
+
+h2{
+    font-size: 1.6em;
+    margin-bottom: 1em;
+    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+}
+
+button{
+    padding: 0.75em;
+    background-color:coral;
+    font-size: 1.1em;
+    border-radius: 10px;
+    border: 0px;
+    margin-right: 1em;
+}
+
+button:hover{
+    cursor: pointer;
 }
 
 .container{
@@ -60,6 +80,7 @@ footer{
 #json-text-area{
     width: 80%;
     height: 500px;
+    margin-bottom: 1em;
 }
 
 #viewer{
