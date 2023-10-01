@@ -211,3 +211,20 @@ $("#json-render-button").click(() => {
         $("#invalid-format-msg").show();
     }
 });
+
+$("#random-json-button").click(function() {
+    const routes = ["posts", "comments", "albums", "photos", "todos", "users"];
+
+    const choice = Math.floor(Math.random() * routes.length);
+    
+    window.location.href = "http://localhost:3000/random/" + routes[choice];
+
+    return true;
+});
+
+$("document").ready(() => {
+    console.log("here");
+    if ($("#json-text-area").text() !== ""){
+        renderJSON();
+    }
+});
